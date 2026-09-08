@@ -1,0 +1,81 @@
+spring:
+  application:
+    name: modular-monolith
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:modular-monolith;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:password}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:org.h2.Driver}
+  flyway:
+    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database-platform: ${JPA_DATABASE_PLATFORM:org.hibernate.dialect.H2Dialect}
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+  h2:
+    console:
+      enabled: ${H2_CONSOLE_ENABLED:true}
+      path: /h2-console
+
+server:
+  port: ${SERVER_PORT:8080}
+  error:
+    include-message: never
+    include-binding-errors: always
+    include-stacktrace: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: when_authorized
+      group:
+        readiness:
+          include: db,ping
+        liveness:
+          include: ping
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: ${spring.application.name}
+    description: Modular monolith built with Spring Boot and Java 17
+    version: 1.0.0
+    java-version: ${java.version}
+
+logging:
+  level:
+    root: INFO
+    com.example: INFO
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.hibernate.SQL: WARN
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# JWT settings (use a base64-encoded 256-bit key in production)
+jwt:
+  secret: ${JWT_SECRET:ZmFrZV9iYXNlNjRfc2VjcmV0X2tleV9mb3JfdGVzdGluZw==}
+  access-expiration: ${JWT_ACCESS_EXPIRATION:3600000}
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION:86400000}
+
+# HMAC secret for refresh tokens (base64). In production set via env/secret manager
+refresh:
+  token:
+    hmac-secret: ${REFRESH_TOKEN_HMAC_SECRET:ZmFrZV9yZWZyZXNoX3NlY3JldF9zaG91bGRfYmVfZm9yX3Rlc3Rpbmc=}
+    expiration-seconds: ${REFRESH_TOKEN_EXPIRATION_SECONDS:86400}
