@@ -1,4 +1,4 @@
-FROM maven:3.9.9-eclipse-temurin-17 AS build
+FROM maven:3.9.9-eclipse-temurin-21 AS build
 WORKDIR /workspace
 COPY pom.xml ./
 COPY shared/pom.xml ./shared/pom.xml
@@ -11,7 +11,7 @@ COPY orders/src ./orders/src
 COPY app/src ./app/src
 RUN mvn -q -am -DskipTests package
 
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:21-jre
 WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends wget && rm -rf /var/lib/apt/lists/*
 COPY --from=build /workspace/app/target/app-1.0.0.jar /app/app.jar
