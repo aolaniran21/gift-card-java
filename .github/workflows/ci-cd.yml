@@ -54,7 +54,13 @@ jobs:
           FLYWAY_URL: jdbc:postgresql://localhost:5432/modular_monolith
           FLYWAY_USER: postgres
           FLYWAY_PASSWORD: postgres
-        run: mvn -B -q -pl app flyway:migrate
+        run: |
+          mvn -B -q -am -pl app install -DskipTests
+          mvn -B -q -f app/pom.xml \
+            org.flywaydb:flyway-maven-plugin:10.15.2:migrate \
+            -Dflyway.url="${FLYWAY_URL}" \
+            -Dflyway.user="${FLYWAY_USER}" \
+            -Dflyway.password="${FLYWAY_PASSWORD}"
 
       - name: Package app
         run: mvn -B -q -DskipTests package
