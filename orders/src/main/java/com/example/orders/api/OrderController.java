@@ -1,4 +1,4 @@
-package com.example.orders.infrastructure.web;
+package com.example.orders.api;
 
 import com.example.orders.api.CreateOrderRequest;
 import com.example.orders.api.OrderResponse;
