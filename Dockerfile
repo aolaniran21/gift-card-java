@@ -4,10 +4,14 @@ COPY pom.xml ./
 COPY shared/pom.xml ./shared/pom.xml
 COPY auth/pom.xml ./auth/pom.xml
 COPY orders/pom.xml ./orders/pom.xml
+COPY kyc/pom.xml ./kyc/pom.xml
+COPY ledger/pom.xml ./ledger/pom.xml
 COPY app/pom.xml ./app/pom.xml
 COPY shared/src ./shared/src
 COPY auth/src ./auth/src
 COPY orders/src ./orders/src
+COPY kyc/src ./kyc/src
+COPY ledger/src ./ledger/src
 COPY app/src ./app/src
 RUN mvn -q -am -DskipTests package
 
